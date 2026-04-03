@@ -94,9 +94,9 @@ export const dict = {
   "dialog.provider.group.popular": "Beliebt",
   "dialog.provider.group.other": "Andere",
   "dialog.provider.tag.recommended": "Empfohlen",
-  "dialog.provider.opencode.note": "Kuratierte Modelle inklusive Claude, GPT, Gemini und mehr",
-  "dialog.provider.opencode.tagline": "Zuverlässige, optimierte Modelle",
-  "dialog.provider.opencodeGo.tagline": "Kostengünstiges Abo für alle",
+  "dialog.provider.nvidia.note": "NVIDIA NIM models including Llama, Nemotron and more",
+  "dialog.provider.nvidia.tagline": "High-performance inference at scale",
+  
   "dialog.provider.anthropic.note": "Mit Claude Pro/Max oder API-Schlüssel verbinden",
   "dialog.provider.copilot.note": "Mit Copilot oder API-Schlüssel verbinden",
   "dialog.provider.openai.note": "Mit ChatGPT Pro/Plus oder API-Schlüssel verbinden",
@@ -124,13 +124,13 @@ export const dict = {
   "provider.connect.apiKey.label": "{{provider}} API-Schlüssel",
   "provider.connect.apiKey.placeholder": "API-Schlüssel",
   "provider.connect.apiKey.required": "API-Schlüssel ist erforderlich",
-  "provider.connect.opencodeZen.line1":
+  "provider.connect.nvidia.line1":
     "KlimDev Zen bietet Ihnen Zugriff auf eine kuratierte Auswahl zuverlässiger, optimierter Modelle für Coding-Agenten.",
-  "provider.connect.opencodeZen.line2":
+  "provider.connect.nvidia.line2":
     "Mit einem einzigen API-Schlüssel erhalten Sie Zugriff auf Modelle wie Claude, GPT, Gemini, GLM und mehr.",
-  "provider.connect.opencodeZen.visit.prefix": "Besuchen Sie ",
-  "provider.connect.opencodeZen.visit.link": "klimdev.ai/zen",
-  "provider.connect.opencodeZen.visit.suffix": ", um Ihren API-Schlüssel zu erhalten.",
+  "provider.connect.nvidia.visit.prefix": "Besuchen Sie ",
+  "provider.connect.nvidia.visit.link": "klimdev.ai/zen",
+  "provider.connect.nvidia.visit.suffix": ", um Ihren API-Schlüssel zu erhalten.",
   "provider.connect.oauth.code.visit.prefix": "Besuchen Sie ",
   "provider.connect.oauth.code.visit.link": "diesen Link",
   "provider.connect.oauth.code.visit.suffix":
@@ -278,7 +278,7 @@ export const dict = {
   "dialog.mcp.description": "{{enabled}} von {{total}} aktiviert",
   "dialog.mcp.empty": "Keine MCPs konfiguriert",
   "dialog.lsp.empty": "LSPs automatisch nach Dateityp erkannt",
-  "dialog.plugins.empty": "In opencode.json konfigurierte Plugins",
+  "dialog.plugins.empty": "In klimdev.json konfigurierte Plugins",
   "mcp.status.connected": "verbunden",
   "mcp.status.failed": "fehlgeschlagen",
   "mcp.status.needs_auth": "benötigt Authentifizierung",
@@ -428,9 +428,9 @@ export const dict = {
   "error.chain.responseBody": "Antwort-Body:\n{{body}}",
   "error.chain.didYouMean": "Meinten Sie: {{suggestions}}",
   "error.chain.modelNotFound": "Modell nicht gefunden: {{provider}}/{{model}}",
-  "error.chain.checkConfig": "Überprüfen Sie Ihre Konfiguration (opencode.json) auf Anbieter-/Modellnamen",
+  "error.chain.checkConfig": "Überprüfen Sie Ihre Konfiguration (klimdev.json) auf Anbieter-/Modellnamen",
   "error.chain.mcpFailed":
-    'MCP-Server "{{name}}" fehlgeschlagen. Hinweis: OpenCode unterstützt noch keine MCP-Authentifizierung.',
+    'MCP-Server "{{name}}" fehlgeschlagen. Hinweis: KlimDev unterstützt noch keine MCP-Authentifizierung.',
   "error.chain.providerAuthFailed": "Anbieter-Authentifizierung fehlgeschlagen ({{provider}}): {{message}}",
   "error.chain.providerInitFailed":
     'Anbieter "{{provider}}" konnte nicht initialisiert werden. Überprüfen Sie Anmeldeinformationen und Konfiguration.',
@@ -552,7 +552,7 @@ export const dict = {
   "sidebar.workspaces.enable": "Arbeitsbereiche aktivieren",
   "sidebar.workspaces.disable": "Arbeitsbereiche deaktivieren",
   "sidebar.gettingStarted.title": "Erste Schritte",
-  "sidebar.gettingStarted.line1": "OpenCode enthält kostenlose Modelle, damit Sie sofort loslegen können.",
+  "sidebar.gettingStarted.line1": "KlimDev enthält kostenlose Modelle, damit Sie sofort loslegen können.",
   "sidebar.gettingStarted.line2":
     "Verbinden Sie einen beliebigen Anbieter, um Modelle wie Claude, GPT, Gemini usw. zu nutzen.",
   "sidebar.project.recentSessions": "Letzte Sitzungen",
@@ -573,12 +573,12 @@ export const dict = {
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Anzeige",
   "settings.general.row.language.title": "Sprache",
-  "settings.general.row.language.description": "Die Anzeigesprache für OpenCode ändern",
+  "settings.general.row.language.description": "Die Anzeigesprache für KlimDev ändern",
   "settings.general.row.appearance.title": "Erscheinungsbild",
-  "settings.general.row.appearance.description": "Anpassen, wie OpenCode auf Ihrem Gerät aussieht",
+  "settings.general.row.appearance.description": "Anpassen, wie KlimDev auf Ihrem Gerät aussieht",
   "settings.general.row.colorScheme.title": "Farbschema",
   "settings.general.row.colorScheme.description":
-    "Wählen Sie, ob OpenCode dem System-, hellen oder dunklen Thema folgt",
+    "Wählen Sie, ob KlimDev dem System-, hellen oder dunklen Thema folgt",
   "settings.general.row.theme.title": "Thema",
   "settings.general.row.theme.description": "Das Thema von KlimDev anpassen.",
   "settings.general.row.font.title": "Code-Schriftart",
