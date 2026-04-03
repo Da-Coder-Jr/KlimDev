@@ -115,7 +115,7 @@ export namespace Provider {
   }
 
   function e2eURL() {
-    const url = Env.get("OPENCODE_E2E_LLM_URL")
+    const url = Env.get("KLIMDEV_E2E_LLM_URL")
     if (typeof url !== "string" || url === "") return
     return url
   }
@@ -175,13 +175,14 @@ export namespace Provider {
         },
       }
     },
-    async opencode(input) {
+    // opencode provider removed -- using nvidia only
+    async _removed_opencode(input) {
       const hasKey = await (async () => {
         const env = Env.all()
         if (input.env.some((item) => env[item])) return true
         if (await Auth.get(input.id)) return true
         const config = await Config.get()
-        if (config.provider?.["opencode"]?.options?.apiKey) return true
+        if (config.provider?.["nvidia"]?.options?.apiKey) return true
         return false
       })()
 
@@ -421,7 +422,7 @@ export namespace Provider {
         options: {
           headers: {
             "HTTP-Referer": "https://klimdev.ai/",
-            "X-Title": "opencode",
+            "X-Title": "klimdev",
           },
         },
       }
@@ -432,7 +433,7 @@ export namespace Provider {
         options: {
           headers: {
             "http-referer": "https://klimdev.ai/",
-            "x-title": "opencode",
+            "x-title": "klimdev",
           },
         },
       }
@@ -531,7 +532,7 @@ export namespace Provider {
         options: {
           headers: {
             "HTTP-Referer": "https://klimdev.ai/",
-            "X-Title": "opencode",
+            "X-Title": "klimdev",
           },
         },
       }
@@ -550,7 +551,7 @@ export namespace Provider {
       const providerConfig = config.provider?.["gitlab"]
 
       const aiGatewayHeaders = {
-        "User-Agent": `opencode/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`,
+        "User-Agent": `klimdev/${Installation.VERSION} gitlab-ai-provider/${GITLAB_PROVIDER_VERSION} (${os.platform()} ${os.release()}; ${os.arch()})`,
         "anthropic-beta": "context-1m-2025-08-07",
         ...(providerConfig?.options?.aiGatewayHeaders || {}),
       }
@@ -690,7 +691,7 @@ export namespace Provider {
         options: {
           apiKey,
           headers: {
-            "User-Agent": `opencode/${Installation.VERSION} cloudflare-workers-ai (${os.platform()} ${os.release()}; ${os.arch()})`,
+            "User-Agent": `klimdev/${Installation.VERSION} cloudflare-workers-ai (${os.platform()} ${os.release()}; ${os.arch()})`,
           },
         },
         async getModel(sdk: any, modelID: string) {
@@ -744,7 +745,7 @@ export namespace Provider {
         skipCache: input.options?.skipCache,
         collectLog: input.options?.collectLog,
         headers: {
-          "User-Agent": `opencode/${Installation.VERSION} cloudflare-ai-gateway (${os.platform()} ${os.release()}; ${os.arch()})`,
+          "User-Agent": `klimdev/${Installation.VERSION} cloudflare-ai-gateway (${os.platform()} ${os.release()}; ${os.arch()})`,
         },
       }
 
@@ -770,7 +771,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "X-Cerebras-3rd-Party-Integration": "opencode",
+            "X-Cerebras-3rd-Party-Integration": "klimdev",
           },
         },
       }
@@ -781,7 +782,7 @@ export namespace Provider {
         options: {
           headers: {
             "HTTP-Referer": "https://klimdev.ai/",
-            "X-Title": "opencode",
+            "X-Title": "klimdev",
           },
         },
       }
@@ -1252,7 +1253,7 @@ export namespace Provider {
                 (providerID === ProviderID.openrouter && modelID === "openai/gpt-5-chat")
               )
                 delete provider.models[modelID]
-              if (model.status === "alpha" && !Flag.OPENCODE_ENABLE_EXPERIMENTAL_MODELS) delete provider.models[modelID]
+              if (model.status === "alpha" && !Flag.KLIMDEV_ENABLE_EXPERIMENTAL_MODELS) delete provider.models[modelID]
               if (model.status === "deprecated") delete provider.models[modelID]
               if (
                 (configProvider?.blacklist && configProvider.blacklist.includes(modelID)) ||
@@ -1527,9 +1528,6 @@ export namespace Provider {
           "gemini-2.5-flash",
           "gpt-5-nano",
         ]
-        if (providerID.startsWith("opencode")) {
-          priority = ["gpt-5-nano"]
-        }
         if (providerID.startsWith("github-copilot")) {
           priority = ["gpt-5-mini", "claude-haiku-4.5", ...priority]
         }
