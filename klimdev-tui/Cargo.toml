@@ -1,0 +1,50 @@
+[package]
+name = "klimdev-tui"
+version = "1.0.0"
+edition = "2021"
+description = "High-performance Claude Code style TUI with NVIDIA NIM AI integration"
+authors = ["KlimDev"]
+
+[[bin]]
+name = "klimdev"
+path = "src/main.rs"
+
+[dependencies]
+# Async runtime -- multi-threaded, full feature set
+tokio = { version = "1.40", features = ["full"] }
+
+# TUI framework with crossterm backend
+ratatui = { version = "0.28", features = ["crossterm"] }
+crossterm = { version = "0.28", features = ["event-stream"] }
+
+# HTTP client with async streaming (rustls for no OpenSSL dependency)
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
+
+# Serialization / deserialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Async stream utilities
+futures = "0.3"
+futures-util = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Time & unique IDs
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+
+# High-performance synchronization primitives
+parking_lot = "0.12"
+
+# Raw byte buffer
+bytes = "1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
