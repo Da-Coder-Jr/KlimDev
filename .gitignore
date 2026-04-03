@@ -1,1 +1,8 @@
 klimdev-tui/target/
+klimdev-opencode/node_modules/
+klimdev-opencode/packages/*/node_modules/
+klimdev-opencode/.git/
+klimdev-opencode/packages/*/dist/
+klimdev-opencode/packages/*/.next/
+klimdev-opencode/packages/opencode/.opencode
+klimdev-opencode/packages/opencode/.klimdev
