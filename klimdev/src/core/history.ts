@@ -3,7 +3,7 @@
 // and serializes/deserializes from disk for persistence.
 
 import { ChatMessage } from "../api/types.js";
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 
@@ -46,13 +46,12 @@ export function loadSession(id: string): Session | null {
 
 export function listSessions(): Session[] {
   ensureDir();
-  const { readdirSync } = require("fs") as typeof import("fs");
   try {
-    const files = readdirSync(HISTORY_DIR).filter((f: string) => f.endsWith(".json"));
+    const files = readdirSync(HISTORY_DIR).filter((f) => f.endsWith(".json"));
     return files
-      .map((f: string) => loadSession(f.replace(".json", "")))
-      .filter((s: Session | null): s is Session => s !== null)
-      .sort((a: Session, b: Session) => b.createdAt.getTime() - a.createdAt.getTime());
+      .map((f) => loadSession(f.replace(".json", "")))
+      .filter((s): s is Session => s !== null)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   } catch {
     return [];
   }

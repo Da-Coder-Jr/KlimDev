@@ -1,6 +1,5 @@
-// Input bar — sits at the bottom of the main panel.
-// Shows the user's current input, the cursor, and a submit hint.
-// Becomes dimmed while a stream is in progress.
+// Input bar — clean single-line input with a subtle border.
+// Looks like opencode's compact input rather than a multi-line box.
 
 import React from "react";
 import { Box, Text } from "ink";
@@ -17,37 +16,40 @@ export function InputBar({ value, isStreaming, focused }: InputBarProps) {
   const borderColor = isStreaming
     ? theme.textMuted
     : focused
-    ? theme.borderActive
+    ? theme.accent
     : theme.border;
 
   return (
     <Box
-      flexDirection="column"
+      flexDirection="row"
       borderStyle="round"
       borderColor={borderColor}
-      paddingX={1}
+      paddingX={2}
+      paddingY={0}
       marginX={1}
       marginBottom={1}
+      alignItems="center"
+      minHeight={3}
     >
-      {/* Text input display */}
-      <Box flexDirection="row" minHeight={2}>
-        <Text color={isStreaming ? theme.textMuted : theme.textStrong} wrap="wrap">
-          {value || (
-            <Text color={theme.textMuted} dimColor>
-              {isStreaming ? "Waiting for response…" : "Ask anything…"}
-            </Text>
-          )}
-          {!isStreaming && focused && <Text color={theme.cursor}>▋</Text>}
-        </Text>
+      <Text color={theme.accent} bold>›</Text>
+      <Text> </Text>
+      <Box flexGrow={1}>
+        {value ? (
+          <Text color={theme.textStrong} wrap="wrap">
+            {value}
+            {!isStreaming && focused && <Text color={theme.cursor}>▋</Text>}
+          </Text>
+        ) : (
+          <Text color={theme.textMuted} dimColor>
+            {isStreaming ? "waiting for response…" : "message KlimDev…"}
+            {!isStreaming && focused && <Text color={theme.textMuted}>▋</Text>}
+          </Text>
+        )}
       </Box>
 
-      {/* Hint bar */}
-      <Box flexDirection="row" justifyContent="space-between" marginTop={0}>
-        <Text color={theme.textMuted}>
-          {isStreaming ? "streaming…" : "↵ send  ⌫ delete  Esc clear"}
-        </Text>
-        <Text color={theme.textMuted}>Ctrl+C quit</Text>
-      </Box>
+      {isStreaming && (
+        <Text color={theme.accent} dimColor>  ●</Text>
+      )}
     </Box>
   );
 }

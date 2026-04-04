@@ -1,50 +1,64 @@
 # KlimDev
 
-AI-powered terminal workspace built with NVIDIA NIM.
+AI-powered terminal workspace. NVIDIA NIM · TypeScript · Ink.
 
 ## Quick start
 
 ```bash
-cd klimdev
-npm install          # or bun install / pnpm install
+git clone https://github.com/Da-Coder-Jr/KlimDev
+cd KlimDev
+
+# Option A — from the repo root (runs npm install inside klimdev/ for you)
 export NVIDIA_API_KEY=nvapi-...
-npm run dev          # launch the TUI
+npm run dev
+
+# Option B — go into the package directly
+cd klimdev
+npm install
+npm run dev
 ```
 
-## Commands
+## CLI commands
 
 ```
-klimdev               Start the TUI
-klimdev models        List available models
+klimdev               Launch the TUI (default)
+klimdev models        List available NVIDIA NIM models
 klimdev config        Manage settings
+  set-key <key>       Save your API key
+  set-model <id>      Set default model
+  show                Print current config
 klimdev help          Show help
-```
-
-## Structure
-
-```
-klimdev/
-├── src/
-│   ├── api/          NVIDIA NIM client + streaming parser
-│   ├── cli/          Argument routing + subcommands
-│   ├── config/       Config file management
-│   ├── core/         Session state + file tree + history
-│   ├── ui/
-│   │   ├── components/  Header, Sidebar, Explorer, ChatView,
-│   │   │                InputBar, Telemetry, StatusBar
-│   │   └── hooks/       useChat, useFileTree, useKeyboard
-│   └── utils/        Format, time, truncate helpers
-└── bin/klimdev       Executable entry point
 ```
 
 ## Keyboard shortcuts
 
-| Key       | Action               |
-|-----------|----------------------|
-| Tab       | Switch panel         |
-| ↑ / ↓     | Navigate sidebar     |
-| Enter     | Select / Send        |
-| Ctrl+N    | New session          |
-| Ctrl+M    | Focus model selector |
-| Ctrl+C    | Quit                 |
-| Esc       | Clear input          |
+| Key       | Action                     |
+|-----------|----------------------------|
+| `[`       | Toggle sidebar open/closed |
+| `Tab`     | Switch between chat/sidebar|
+| `↑` / `↓` | Navigate sidebar           |
+| `Enter`   | Open folder / select model |
+| `Ctrl+N`  | New chat session           |
+| `Ctrl+M`  | Open model selector        |
+| `Esc`     | Clear input / back to chat |
+| `Ctrl+C`  | Quit                       |
+
+## Layout
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  KlimDev · Llama 3.1 Nemotron 70B                   12:34  │
+├──────────────┬──────────────────────────────────────────────┤
+│ ▼ Files      │                                              │
+│   ▶ src/     │  │ klimdev                                   │
+│   ▼ klimdev/ │  │ AI workspace · NVIDIA NIM                 │
+│     ▶ api/   │                                              │
+│     ▶ ui/    │  Start typing to begin a conversation.       │
+│ ▼ Sessions   │  Press [ to toggle sidebar.                  │
+│ ▼ Models     │ ╭────────────────────────────────────────╮   │
+│              │ │ › message KlimDev…                     │   │
+│              │ ╰────────────────────────────────────────╯   │
+├──────────────┴──────────────────────────────────────────────┤
+│ Tab panel  [ sidebar  ^N new  ^M model          0 msgs      │
+└─────────────────────────────────────────────────────────────┘
+```

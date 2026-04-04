@@ -1,20 +1,20 @@
-// Header bar — spans the full terminal width at the top.
-// Shows the KlimDev logo, active model name, and current time.
+// Minimal header bar — brand name, active model, and clock.
+// Stays out of the way so the chat panel can breathe.
 
 import React from "react";
 import { Box, Text } from "ink";
 import { theme } from "../theme.js";
-import { formatTime } from "../../utils/time.js";
 import { findModel } from "../../api/models.js";
 
 interface HeaderProps {
   modelId: string;
   currentTime: string;
+  sidebarOpen: boolean;
 }
 
-export function Header({ modelId, currentTime }: HeaderProps) {
+export function Header({ modelId, currentTime, sidebarOpen }: HeaderProps) {
   const model = findModel(modelId);
-  const modelLabel = model ? model.name : modelId;
+  const modelName = model?.name ?? modelId.split("/").pop() ?? modelId;
 
   return (
     <Box
@@ -22,29 +22,25 @@ export function Header({ modelId, currentTime }: HeaderProps) {
       justifyContent="space-between"
       alignItems="center"
       paddingX={2}
+      paddingY={0}
       borderStyle="single"
       borderColor={theme.accent}
       borderTop={false}
       borderLeft={false}
       borderRight={false}
     >
-      {/* Brand */}
-      <Box flexDirection="row" gap={1}>
-        <Text bold color={theme.accent}>
-          KLIMDEV
+      <Box flexDirection="row" gap={1} alignItems="center">
+        <Text bold color={theme.accent}>KlimDev</Text>
+        <Text color={theme.textMuted}>·</Text>
+        <Text color={theme.info} dimColor>{modelName}</Text>
+      </Box>
+
+      <Box flexDirection="row" gap={2}>
+        <Text color={theme.textMuted} dimColor>
+          [{sidebarOpen ? "[ ] sidebar" : "[ ] sidebar"}]
         </Text>
-        <Text color={theme.textMuted}>|</Text>
-        <Text color={theme.textWeak}>AI workspace</Text>
+        <Text color={theme.textWeak}>{currentTime}</Text>
       </Box>
-
-      {/* Active model */}
-      <Box flexDirection="row" gap={1}>
-        <Text color={theme.textMuted}>model:</Text>
-        <Text color={theme.info}>{modelLabel}</Text>
-      </Box>
-
-      {/* Clock */}
-      <Text color={theme.textWeak}>{currentTime}</Text>
     </Box>
   );
 }

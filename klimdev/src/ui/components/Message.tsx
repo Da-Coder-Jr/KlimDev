@@ -1,5 +1,5 @@
-// A single chat message bubble.
-// User messages are right-leaning; assistant messages fill the available width.
+// A single chat message — clean and spacious like opencode's style.
+// User messages have a subtle left border in red; assistant messages in blue.
 
 import React from "react";
 import { Box, Text } from "ink";
@@ -14,42 +14,38 @@ interface MessageProps {
 
 export function Message({ message, isStreaming, streamingContent }: MessageProps) {
   const isUser = message.role === "user";
-  const isAssistant = message.role === "assistant";
-
   const content =
-    isStreaming && isAssistant && streamingContent !== undefined
+    isStreaming && !isUser && streamingContent !== undefined
       ? streamingContent
       : message.content;
 
-  const label = isUser ? "you" : "klimdev";
-  const labelColor = isUser ? theme.userLabel : theme.assistantLabel;
-
   return (
-    <Box
-      flexDirection="column"
-      marginBottom={1}
-      paddingX={1}
-    >
-      {/* Sender label */}
-      <Box flexDirection="row" gap={1} marginBottom={0}>
-        <Text bold color={labelColor}>
-          {label}
-        </Text>
-        {isStreaming && isAssistant && (
-          <Text color={theme.textMuted} dimColor>
-            streaming…
-          </Text>
-        )}
+    <Box flexDirection="row" marginBottom={1} paddingX={1}>
+      {/* Colored left border strip */}
+      <Box width={1} flexShrink={0}>
+        <Text color={isUser ? theme.userLabel : theme.assistantLabel}>│</Text>
       </Box>
 
-      {/* Message body */}
-      <Box paddingLeft={2}>
-        <Text color={isUser ? theme.textNormal : theme.textStrong} wrap="wrap">
-          {content}
-          {isStreaming && isAssistant && (
-            <Text color={theme.cursor}>▋</Text>
+      <Box flexDirection="column" paddingLeft={1} flexGrow={1}>
+        {/* Role label */}
+        <Box marginBottom={0}>
+          <Text bold color={isUser ? theme.userLabel : theme.assistantLabel}>
+            {isUser ? "you" : "klimdev"}
+          </Text>
+          {isStreaming && !isUser && (
+            <Text color={theme.textMuted} dimColor>  thinking…</Text>
           )}
-        </Text>
+        </Box>
+
+        {/* Message body */}
+        <Box paddingTop={0}>
+          <Text color={theme.textStrong} wrap="wrap">
+            {content}
+            {isStreaming && !isUser && (
+              <Text color={theme.cursor}>▋</Text>
+            )}
+          </Text>
+        </Box>
       </Box>
     </Box>
   );

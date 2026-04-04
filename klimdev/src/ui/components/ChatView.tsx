@@ -1,5 +1,5 @@
-// Chat message viewport — renders the conversation history.
-// Automatically shows the streaming message at the bottom while a reply is in flight.
+// Chat message viewport — clean, spacious, opencode-inspired.
+// The welcome screen shows when there are no messages yet.
 
 import React from "react";
 import { Box, Text } from "ink";
@@ -14,49 +14,70 @@ interface ChatViewProps {
   lastError: string | null;
 }
 
-export function ChatView({ messages, isStreaming, streamingContent, lastError }: ChatViewProps) {
-  if (messages.length === 0 && !isStreaming) {
-    return (
-      <Box flexDirection="column" paddingX={2} paddingY={1} flexGrow={1}>
-        <Box flexDirection="column" gap={0} alignItems="center" justifyContent="center" flexGrow={1}>
-          <Text bold color={theme.accent}>
-            KLIMDEV
-          </Text>
-          <Text color={theme.textWeak}>AI-powered terminal workspace</Text>
-          <Box marginTop={1}>
-            <Text color={theme.textMuted}>
-              Type a message below and press Enter to start chatting.
-            </Text>
-          </Box>
-          <Box marginTop={1} flexDirection="column" gap={0}>
-            <Text color={theme.textMuted}>
-              Powered by NVIDIA NIM · Tab to switch panels
-            </Text>
-          </Box>
+function WelcomeScreen() {
+  return (
+    <Box
+      flexDirection="column"
+      flexGrow={1}
+      alignItems="center"
+      justifyContent="center"
+      paddingX={4}
+    >
+      <Box flexDirection="column" alignItems="center" gap={0}>
+        <Text bold color={theme.accent}>
+          ╔═══════════════╗
+        </Text>
+        <Text bold color={theme.accent}>
+          ║   KLIMDEV     ║
+        </Text>
+        <Text bold color={theme.accent}>
+          ╚═══════════════╝
+        </Text>
+
+        <Box marginTop={1}>
+          <Text color={theme.textWeak}>AI workspace · NVIDIA NIM</Text>
+        </Box>
+
+        <Box marginTop={2} flexDirection="column" alignItems="center" gap={0}>
+          <Text color={theme.textMuted}>Start typing to begin a conversation.</Text>
+          <Text color={theme.textMuted}>Press <Text color={theme.textNormal}>[</Text> to toggle the sidebar.</Text>
+          <Text color={theme.textMuted}>Press <Text color={theme.textNormal}>Ctrl+M</Text> to switch model.</Text>
         </Box>
       </Box>
-    );
+    </Box>
+  );
+}
+
+export function ChatView({ messages, isStreaming, streamingContent, lastError }: ChatViewProps) {
+  if (messages.length === 0 && !isStreaming) {
+    return <WelcomeScreen />;
   }
 
+  // Is the last committed message a user message (assistant reply still streaming)?
+  const lastIsUser =
+    messages.length > 0 && messages[messages.length - 1].role === "user";
+
   return (
-    <Box flexDirection="column" paddingX={1} flexGrow={1} overflowY="hidden">
-      {/* Existing messages */}
+    <Box flexDirection="column" flexGrow={1} paddingX={1} overflowY="hidden">
+      <Box marginTop={1} />
+
       {messages.map((msg, idx) => {
         const isLastAssistant =
           idx === messages.length - 1 && msg.role === "assistant";
-
         return (
           <Message
             key={idx}
             message={msg}
             isStreaming={isStreaming && isLastAssistant}
-            streamingContent={isStreaming && isLastAssistant ? streamingContent : undefined}
+            streamingContent={
+              isStreaming && isLastAssistant ? streamingContent : undefined
+            }
           />
         );
       })}
 
-      {/* Streaming reply not yet committed to messages[] */}
-      {isStreaming && (messages.length === 0 || messages[messages.length - 1].role === "user") && (
+      {/* Streaming reply not yet appended to messages[] */}
+      {isStreaming && lastIsUser && (
         <Message
           message={{ role: "assistant", content: streamingContent }}
           isStreaming
@@ -64,10 +85,9 @@ export function ChatView({ messages, isStreaming, streamingContent, lastError }:
         />
       )}
 
-      {/* Error display */}
       {lastError && (
-        <Box paddingX={1} marginTop={1}>
-          <Text color={theme.error}>⚠ {lastError}</Text>
+        <Box paddingX={2} marginTop={1}>
+          <Text color={theme.error}>⚠  {lastError}</Text>
         </Box>
       )}
     </Box>

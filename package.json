@@ -1,0 +1,10 @@
+{
+  "name": "klimdev-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm install --prefix klimdev && npm run dev --prefix klimdev",
+    "install:tui": "npm install --prefix klimdev",
+    "build": "npm run build --prefix klimdev",
+    "start": "npm run start --prefix klimdev"
+  }
+}

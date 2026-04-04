@@ -1,22 +1,27 @@
 #!/usr/bin/env node
+// KlimDev CLI entry point.
+// In development, tsx compiles TypeScript on the fly.
+// After `npm run build`, the compiled JS in dist/ is used directly.
+
 import { createRequire } from "module";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join } from "path";
+import { existsSync } from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Try compiled dist first, fall back to tsx for dev
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const distEntry = join(__dirname, "../dist/index.js");
 const srcEntry = join(__dirname, "../src/index.ts");
 
-import { existsSync } from "fs";
-
 if (existsSync(distEntry)) {
-  await import(distEntry);
-} else {
-  // Development: run via tsx
+  // Production: run pre-compiled output
+  await import(pathToFileURL(distEntry).href);
+} else if (existsSync(srcEntry)) {
+  // Development: run TypeScript directly via tsx
   const { register } = await import("tsx/esm");
   register();
-  await import(srcEntry);
+  await import(pathToFileURL(srcEntry).href);
+} else {
+  console.error("KlimDev: could not find dist/index.js or src/index.ts");
+  console.error("Run `npm install` inside the klimdev/ directory first.");
+  process.exit(1);
 }

@@ -1,66 +1,71 @@
-// Status bar — bottom row spanning the full terminal width.
-// Shows keyboard shortcuts, active panel, and session info.
+// Status bar — single line at the bottom.
+// Shows mode, shortcuts, and live token count inline (no separate telemetry pane).
 
 import React from "react";
 import { Box, Text } from "ink";
 import { theme } from "../theme.js";
+import { formatNumber } from "../../utils/format.js";
 
 interface StatusBarProps {
   activePanel: string;
-  sessionId: string;
   messageCount: number;
   isStreaming: boolean;
+  totalTokens: number;
+  tokensPerSecond: number;
 }
 
-interface ShortcutProps {
-  keys: string;
-  description: string;
+function Key({ k }: { k: string }) {
+  return <Text color={theme.textWeak}>{k}</Text>;
 }
 
-function Shortcut({ keys, description }: ShortcutProps) {
-  return (
-    <Box flexDirection="row" gap={0} marginRight={2}>
-      <Text backgroundColor="#2A2A2A" color={theme.textStrong}>
-        {" "}{keys}{" "}
-      </Text>
-      <Text color={theme.textWeak}> {description}</Text>
-    </Box>
-  );
-}
-
-export function StatusBar({ activePanel, sessionId, messageCount, isStreaming }: StatusBarProps) {
+export function StatusBar({
+  activePanel,
+  messageCount,
+  isStreaming,
+  totalTokens,
+  tokensPerSecond,
+}: StatusBarProps) {
   return (
     <Box
       flexDirection="row"
       justifyContent="space-between"
-      alignItems="center"
-      paddingX={1}
+      paddingX={2}
       borderStyle="single"
       borderColor={theme.border}
       borderBottom={false}
       borderLeft={false}
       borderRight={false}
     >
-      {/* Shortcuts */}
-      <Box flexDirection="row" flexWrap="wrap">
-        <Shortcut keys="Tab" description="panel" />
-        <Shortcut keys="↑↓" description="navigate" />
-        <Shortcut keys="↵" description="select/send" />
-        <Shortcut keys="Ctrl+N" description="new session" />
-        <Shortcut keys="Ctrl+M" description="models" />
+      {/* Left: shortcuts */}
+      <Box flexDirection="row" gap={2}>
+        <Box gap={1}>
+          <Key k="Tab" /><Text color={theme.textMuted}>panel</Text>
+        </Box>
+        <Box gap={1}>
+          <Key k="[" /><Text color={theme.textMuted}>sidebar</Text>
+        </Box>
+        <Box gap={1}>
+          <Key k="^N" /><Text color={theme.textMuted}>new</Text>
+        </Box>
+        <Box gap={1}>
+          <Key k="^M" /><Text color={theme.textMuted}>model</Text>
+        </Box>
       </Box>
 
-      {/* Right side info */}
+      {/* Right: live stats */}
       <Box flexDirection="row" gap={2}>
-        <Text color={theme.textMuted}>
-          panel: <Text color={theme.info}>{activePanel}</Text>
-        </Text>
-        <Text color={theme.textMuted}>
-          msgs: <Text color={theme.textNormal}>{messageCount}</Text>
-        </Text>
         {isStreaming && (
-          <Text color={theme.accent}>● streaming</Text>
+          <Text color={theme.accent}>● streaming {tokensPerSecond > 0 ? `${tokensPerSecond}t/s` : ""}</Text>
         )}
+        {totalTokens > 0 && !isStreaming && (
+          <Text color={theme.textMuted}>{formatNumber(totalTokens)} tokens</Text>
+        )}
+        <Text color={theme.textMuted}>{messageCount} msgs</Text>
+        <Text color={theme.textMuted}>
+          <Text color={activePanel === "chat" ? theme.info : theme.textWeak}>
+            {activePanel}
+          </Text>
+        </Text>
       </Box>
     </Box>
   );
