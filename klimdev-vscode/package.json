@@ -1,0 +1,251 @@
+{
+  "name": "klimdev",
+  "displayName": "KlimDev — AI Code Editor",
+  "description": "Transform VS Code into a Cursor-like AI-powered editor using NVIDIA NIM API",
+  "version": "0.1.0",
+  "publisher": "klimdev",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Other"
+  ],
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "klimdev.openChat",
+        "title": "KlimDev: Open AI Chat",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "klimdev.inlineEdit",
+        "title": "KlimDev: Inline Edit (⌘K)"
+      },
+      {
+        "command": "klimdev.explainCode",
+        "title": "KlimDev: Explain Selected Code"
+      },
+      {
+        "command": "klimdev.refactorCode",
+        "title": "KlimDev: Refactor Selected Code"
+      },
+      {
+        "command": "klimdev.fixCode",
+        "title": "KlimDev: Fix Selected Code"
+      },
+      {
+        "command": "klimdev.generateDocs",
+        "title": "KlimDev: Generate Documentation"
+      },
+      {
+        "command": "klimdev.generateTests",
+        "title": "KlimDev: Generate Tests"
+      },
+      {
+        "command": "klimdev.toggleCompletion",
+        "title": "KlimDev: Toggle AI Autocomplete"
+      },
+      {
+        "command": "klimdev.newChat",
+        "title": "KlimDev: New Chat Session",
+        "icon": "$(add)"
+      },
+      {
+        "command": "klimdev.acceptInlineEdit",
+        "title": "KlimDev: Accept Inline Edit"
+      },
+      {
+        "command": "klimdev.rejectInlineEdit",
+        "title": "KlimDev: Reject Inline Edit"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "klimdev-sidebar",
+          "title": "KlimDev AI",
+          "icon": "$(sparkle)"
+        }
+      ]
+    },
+    "views": {
+      "klimdev-sidebar": [
+        {
+          "type": "webview",
+          "id": "klimdev.chatView",
+          "name": "AI Chat"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "klimdev.explainCode",
+          "when": "editorHasSelection",
+          "group": "klimdev@1"
+        },
+        {
+          "command": "klimdev.refactorCode",
+          "when": "editorHasSelection",
+          "group": "klimdev@2"
+        },
+        {
+          "command": "klimdev.fixCode",
+          "when": "editorHasSelection",
+          "group": "klimdev@3"
+        },
+        {
+          "command": "klimdev.generateDocs",
+          "when": "editorHasSelection",
+          "group": "klimdev@4"
+        },
+        {
+          "command": "klimdev.generateTests",
+          "when": "editorHasSelection",
+          "group": "klimdev@5"
+        },
+        {
+          "command": "klimdev.inlineEdit",
+          "when": "editorHasSelection",
+          "group": "klimdev@0"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "klimdev.newChat",
+          "when": "view == klimdev.chatView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "klimdev.inlineEdit",
+        "key": "ctrl+k",
+        "mac": "cmd+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "klimdev.openChat",
+        "key": "ctrl+l",
+        "mac": "cmd+l"
+      },
+      {
+        "command": "klimdev.toggleCompletion",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "klimdev.acceptInlineEdit",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "klimdev.inlineEditActive"
+      },
+      {
+        "command": "klimdev.rejectInlineEdit",
+        "key": "escape",
+        "when": "klimdev.inlineEditActive"
+      }
+    ],
+    "configuration": {
+      "title": "KlimDev AI",
+      "properties": {
+        "klimdev.nvidia.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NVIDIA NIM API key (nvapi-...)",
+          "order": 0
+        },
+        "klimdev.nvidia.baseUrl": {
+          "type": "string",
+          "default": "https://integrate.api.nvidia.com/v1",
+          "description": "NVIDIA NIM API base URL",
+          "order": 1
+        },
+        "klimdev.nvidia.chatModel": {
+          "type": "string",
+          "default": "meta/llama-3.1-70b-instruct",
+          "description": "Model for chat and code actions",
+          "enum": [
+            "meta/llama-3.1-70b-instruct",
+            "meta/llama-3.1-405b-instruct",
+            "meta/llama-3.3-70b-instruct",
+            "nvidia/llama-3.1-nemotron-70b-instruct",
+            "meta/codellama-70b",
+            "mistralai/mixtral-8x22b-instruct-v0.1",
+            "mistralai/mistral-large-2-instruct",
+            "deepseek-ai/deepseek-coder-6.7b-instruct",
+            "google/gemma-2-27b-it",
+            "qwen/qwen2.5-coder-32b-instruct"
+          ],
+          "order": 2
+        },
+        "klimdev.nvidia.completionModel": {
+          "type": "string",
+          "default": "qwen/qwen2.5-coder-32b-instruct",
+          "description": "Model for inline code completions",
+          "enum": [
+            "qwen/qwen2.5-coder-32b-instruct",
+            "deepseek-ai/deepseek-coder-6.7b-instruct",
+            "meta/codellama-70b",
+            "meta/llama-3.1-70b-instruct"
+          ],
+          "order": 3
+        },
+        "klimdev.completion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI-powered inline code completions",
+          "order": 4
+        },
+        "klimdev.completion.debounceMs": {
+          "type": "number",
+          "default": 300,
+          "description": "Debounce delay for completions (ms)",
+          "order": 5
+        },
+        "klimdev.chat.systemPrompt": {
+          "type": "string",
+          "default": "",
+          "description": "Custom system prompt appended to the default",
+          "order": 6
+        },
+        "klimdev.maxTokens": {
+          "type": "number",
+          "default": 4096,
+          "description": "Maximum tokens for AI responses",
+          "order": 7
+        },
+        "klimdev.temperature": {
+          "type": "number",
+          "default": 0.3,
+          "description": "Temperature for AI responses (0-1)",
+          "order": 8
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.config.js --production",
+    "watch": "node esbuild.config.js --watch",
+    "lint": "eslint src --ext ts",
+    "package": "npx @vscode/vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.19.11",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {}
+}
